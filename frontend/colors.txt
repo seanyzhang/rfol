@@ -1,0 +1,5 @@
+Text: #1e1a2e
+BG: #f4f2eb
+Primary: #777983
+Secondary: #b7bbc2
+Accent: #5b4f6d

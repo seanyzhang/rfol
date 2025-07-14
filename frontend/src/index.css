@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+:root {
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--color-text);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+@media (prefers-color-scheme: light) {
+}
+
+/* Themes */
+@theme{
+  /* Default Colors*/
+  --color-text: #1e1a2e;
+  --bg-light: #f4f2eb;
+  --bg-primary: #777983;
+  --bg-secondary: #b7bbc2;
+  --bg-accent: #5b4f6d;
+
+  /* Dark Mode Colors*/
+  --color-dark: #d5d1e5;
+  --bg-dark: #14120b;
+  --bg-primary-dark: #7c7e88;
+  --bg-secondary-dark: #3d4148;
+  --bg-accent-dark: #9e92b0;
+}
+
+/* Light Theme Classes */
+.color-text {
+  color: var(--color-text);
+}
+
+.color-accent {
+  color: var(--bg-accent)
+}
+
+.dark .color-accent {
+  color: var(--bg-accent-dark)
+}
+
+.bg-text {
+  background-color: var(--color-text);
+}
+
+.bg-light {
+  background-color: var(--bg-light);
+}
+
+.bg-primary {
+  background-color: var(--bg-primary);
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+.bg-accent {
+  background-color: var(--bg-accent);
+}
+
+.border-primary {
+  border-color: var(--bg-primary);
+}
+
+.border-secondary {
+  border-color: var(--bg-secondary);
+}
+
+.border-accent {
+  border-color: var(--bg-accent);
+}
+
+/* Dark Theme Classes */
+.dark .color-text {
+  color: var(--color-dark);
+}
+
+.dark .bg-dark {
+  background-color: var(--bg-dark);
+}
+
+.dark .bg-primary {
+  background-color: var(--bg-primary-dark);
+}
+
+.dark .bg-secondary {
+  background-color: var(--bg-secondary-dark);
+}
+
+.dark .bg-accent {
+  background-color: var(--bg-accent-dark);
+}
+
+.dark .border-primary {
+  border-color: var(--bg-primary-dark);
+}
+
+.dark .border-secondary {
+  border-color: var(--bg-secondary-dark);
+}
+
+.dark .border-accent {
+  border-color: var(--bg-accent-dark);
+}
+
+/* Utilities */
+@utility container{
+  display: flex;
+  flex-direction: column;
+  padding: 0 5vw;
+  max-width: 100%;
+  max-height: 200vh;
+  justify-items: center;
+}
+
+@utility no-scrollbar{
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -1,0 +1,147 @@
+#######################
+# Python (backend/)
+#######################
+
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.envrc
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+**/.venv/
+
+# Environment files
+.env
+.env.*
+**/.env
+**/.env.*
+
+# C extensions & builds
+*.so
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.hypothesis/
+.pytest_cache/
+.dmypy.json
+dmypy.json
+
+# Type checkers
+.mypy_cache/
+.pyre/
+.pytype/
+
+# Static analysis
+.ruff_cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Django / Flask
+*.log
+local_settings.py
+instance/
+.webassets-cache
+db.sqlite3
+db.sqlite3-journal
+
+# Misc project configs
+.pdm-python
+.pdm-build/
+__pypackages__/
+.pybuilder/
+target/
+.scrapy
+docs/_build/
+.site
+.pyre/
+.pytype/
+.pytest_cache/
+.spyderproject
+.spyproject
+.ropeproject
+.pypirc
+.cursorignore
+.cursorindexingignore
+
+# IDE
+.idea/
+
+#######################
+# JavaScript/Node (frontend/)
+#######################
+
+# Dependencies
+**/node_modules/
+
+# Build output
+dist/
+build/
+.next/
+out/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Cache & build artifacts
+.cache/
+.eslintcache
+.husky/_/
+*.tsbuildinfo
+
+# Coverage
+coverage/
+*.lcov
+
+# Storybook
+storybook-static/
+
+# Docker
+docker-compose.override.yml
+
+# System/Editor
+.vsc
