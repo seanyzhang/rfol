@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Boolean, Integer
 from sqlalchemy.dialects.postgresql import UUID
-from backend.db import Base
+from app.db import Base
 from uuid import uuid4
 
 class User(Base):

@@ -10,7 +10,7 @@ from passlib.context import CryptContext
 from backend.models.user_model import User
 from backend.schemas.token_schema import *
 from backend.crud.user_crud import get_user_by_query
-from backend.db import db_dependency
+from backend.app.db import db_dependency
 
 from dotenv import load_dotenv
 import os

@@ -1,9 +1,9 @@
-from backend.db import db_dependency
-from backend.schemas.user_schema import UserBase
+from app.db import db_dependency
+from app.schemas.user_schema import UserBase
 from fastapi import HTTPException
 from pydantic import EmailStr
 from sqlalchemy.exc import IntegrityError
-import backend.models as models
+import app.models as models
 
 def create_user(user: UserBase, hashed_pw: str, db: db_dependency):
     new_user = models.User(
