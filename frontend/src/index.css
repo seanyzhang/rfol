@@ -20,102 +20,85 @@ html, body {
   height: 100%;
 }
 
-@media (prefers-color-scheme: light) {
-}
-
 /* Themes */
-@theme{
-  /* Default Colors*/
+@theme {
+  /* Light Theme Colors */
   --color-text: #1e1a2e;
-  --bg-light: #f4f2eb;
-  --bg-primary: #777983;
-  --bg-secondary: #b7bbc2;
-  --bg-accent: #5b4f6d;
+  --color-bg-light: #f4f2eb;
+  --color-bg-primary: #777983;
+  --color-bg-secondary: #b7bbc2;
+  --color-bg-accent: #5b4f6d;
 
-  /* Dark Mode Colors*/
-  --color-dark: #d5d1e5;
-  --bg-dark: #14120b;
-  --bg-primary-dark: #7c7e88;
-  --bg-secondary-dark: #3d4148;
-  --bg-accent-dark: #9e92b0;
+  /* Dark Theme Colors */
+  --color-text-dark: #d5d1e5;
+  --color-bg-dark: #14120b;
+  --color-bg-primary-dark: #7c7e88;
+  --color-bg-secondary-dark: #3d4148;
+  --color-bg-accent-dark: #9e92b0;
 }
 
-/* Light Theme Classes */
-.color-text {
+/* Light Theme Utilities */
+.text-color {
   color: var(--color-text);
 }
-
-.color-accent {
-  color: var(--bg-accent)
+.text-accent {
+  color: var(--color-bg-accent);
 }
-
-.dark .color-accent {
-  color: var(--bg-accent-dark)
-}
-
 .bg-text {
   background-color: var(--color-text);
 }
-
 .bg-light {
-  background-color: var(--bg-light);
+  background-color: var(--color-bg-light);
 }
-
 .bg-primary {
-  background-color: var(--bg-primary);
+  background-color: var(--color-bg-primary);
 }
-
 .bg-secondary {
-  background-color: var(--bg-secondary);
+  background-color: var(--color-bg-secondary);
 }
-
 .bg-accent {
-  background-color: var(--bg-accent);
+  background-color: var(--color-bg-accent);
 }
-
 .border-primary {
-  border-color: var(--bg-primary);
+  border-color: var(--color-bg-primary);
 }
-
 .border-secondary {
-  border-color: var(--bg-secondary);
+  border-color: var(--color-bg-secondary);
 }
-
 .border-accent {
-  border-color: var(--bg-accent);
+  border-color: var(--color-bg-accent);
 }
 
-/* Dark Theme Classes */
-.dark .color-text {
-  color: var(--color-dark);
+/* Dark Theme Utilities */
+.dark .text-color {
+  color: var(--color-text-dark);
 }
-
-.dark .bg-dark {
-  background-color: var(--bg-dark);
+.dark .text-accent {
+  color: var(--color-bg-accent-dark);
 }
-
+.dark .bg-text {
+  background-color: var(--color-text-dark);
+}
+.dark .bg-light {
+  background-color: var(--color-bg-dark); /* optional fallback */
+}
 .dark .bg-primary {
-  background-color: var(--bg-primary-dark);
+  background-color: var(--color-bg-primary-dark);
 }
-
 .dark .bg-secondary {
-  background-color: var(--bg-secondary-dark);
+  background-color: var(--color-bg-secondary-dark);
 }
-
 .dark .bg-accent {
-  background-color: var(--bg-accent-dark);
+  background-color: var(--color-bg-accent-dark);
 }
-
 .dark .border-primary {
-  border-color: var(--bg-primary-dark);
+  border-color: var(--color-bg-primary-dark);
 }
-
 .dark .border-secondary {
-  border-color: var(--bg-secondary-dark);
+  border-color: var(--color-bg-secondary-dark);
 }
-
 .dark .border-accent {
-  border-color: var(--bg-accent-dark);
+  border-color: var(--color-bg-accent-dark);
 }
 
 /* Utilities */
@@ -135,4 +118,14 @@ html, body {
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+@utility no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }

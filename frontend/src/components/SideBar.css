@@ -1,30 +1,50 @@
 .sidebar {
     background: transparent;
-    -webkit-backdrop-filter: blur(0.9px);
-    color: var(--color-accent);
 }
 
 .list-item {
     @apply flex justify-start items-center text-[2rem];
     list-style: none;
-}
-
-.list-item {
     background: rgba(183,188,194,0.6);
     border-radius: 32px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(0.9px);
-    -webkit-backdrop-filter: blur(0.9px);
-    transition: all 0.35s ease-in-out ;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    
+    border: solid 1px transparent; 
+    transform: translateY(0);
+    transition: all 0.25s ease-in-out,
+        box-shadow 50ms ease-in-out,
+        opacity 5ms ease-in-out;
 }
 
 .list-text {
-    transition: all 0.35s ease-in-out ;
+    background: #777983;
+    border-radius: 1.6rem;
+    color: #d5d1e5;
+    padding: 0.5rem 0.8rem;
+    transition: all 0.35s ease-in-out;
 }
 
+/* Glass background     
+box-shadow: rgba(227, 228, 237, 0.37);
+backdrop-filter: blur(30px);
+border: 2px solid rgba(255, 255, 255, 0.18);
+*/
+
 .list-item:hover {
-    background: rgba(183,188,194,1);
+    background: rgba(183,188,194,.5);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(1.6px);
     -webkit-backdrop-filter: blur(1.6px);
+    scale: 1.1;
+
+    border: solid 1px #5b4f6d;
+    transform: translateY(-0.25em);
+}
+
+.list:has(.list-item:hover) .list-item:not(:hover) {
+    filter: blur(.5px);
+    scale: 0.9;
+    transition: filter 0.35s ease-in-out, scale 0.35s ease-in-out;
 }

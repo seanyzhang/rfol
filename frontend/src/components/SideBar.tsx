@@ -1,30 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./SideBar.css"
 import { ANIMATION_DELAYS, ICON_MAP } from "../constants";
 
 const items = ["Dropdown", "Dashboard", "Income", "Transactions", "Planning", "Goals"];
 
-type Props = {
-  navTo: (address: string) => void;
-}
-
-const SideBarItem = ({ label, onClick, children }: { label: string, onClick: () => void, children: React.ReactNode }) => (
+const SideBarItem = ({ className, label, onClick, children }: { className?: string, label?: string, onClick: () => void, children: React.ReactNode }) => (
     <li className="list-item relative group" onClick={onClick}>
-        <div className="list-icon hover:cursor-pointer">
+        <div className={`list-icon ${className ?? ""} hover:cursor-pointer`}>
             { children }
-        </div>
-        <div className="list-text absolute ml-3 left-full m-auto color-accent invisible opacity-0 group-hover:visible group-hover:opacity-100">
-            <p className="text-[1.5rem] p-0.5"> { label } </p>
-        </div>
+        </div> 
+        {label &&
+            <div className="list-text pointer-events-none absolute ml-3 left-full m-auto color-accent invisible opacity-0 group-hover:visible group-hover:opacity-100">
+                <p className="text-[1.5rem] p-0.5"> { label } </p>
+            </div>
+        }
     </li>
 )
 
-const SideBar = ({navTo} : Props) => {
+const SideBar = () => {
     const [focused, setFocused] = useState(false);
     
     return (
         <div className="sidebar fixed flex flex-col top-1/2 -translate-y-1/2 height-[100vh] gap-6">
-            <ul className="">
+            <ul>
                 <SideBarItem label="" onClick={() => setFocused(prev => !prev)}>
                     {ICON_MAP["Dropdown"]}
                 </SideBarItem>
@@ -34,7 +32,7 @@ const SideBar = ({navTo} : Props) => {
                 }`}>
                 {items.slice(1).map(label => (
                     <SideBarItem key={label} label={label} onClick={() => navTo(label.toLowerCase())}>
-                    {ICON_MAP[label]}
+                        {ICON_MAP[label]}
                     </SideBarItem>
                 ))}
             </ul>
