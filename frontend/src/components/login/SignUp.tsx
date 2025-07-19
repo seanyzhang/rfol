@@ -22,13 +22,9 @@ type Props = {
     setServerErr: React.Dispatch<React.SetStateAction<string>>;
 }
 
-type Name = {
-    firstName: string;
-    lastName: string;
-}
-
 type User_Data = {
-    full_name: Name,
+    first_name: string,
+    last_name: string,
     username: string,
     email: string,
     password: string
@@ -49,7 +45,8 @@ const SignUp = ({register, handleSubmit, errors, setHasAccount, setServerErr}: P
 
     const submit: SubmitHandler<SignUpFormData> = async (data) => {
         const user_data: User_Data = {
-            full_name: { firstName: data.firstname, lastName: data.lastname},
+            first_name: data.firstname, 
+            last_name: data.lastname,
             username: data.username,
             email: data.email,
             password: data.password,

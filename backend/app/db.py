@@ -4,21 +4,24 @@ from sqlalchemy.orm import sessionmaker, Session
 from fastapi import Depends
 from typing import Annotated
 from dotenv import load_dotenv
+from app.logger import logger
 
 import os
 load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_engine(SQLALCHEMY_DATABASE_URL) 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 def get_db():
+    logger.debug("Opening new DB session")
     db = SessionLocal()
     try:
         yield db
     finally:
+        logger.debug("Closing DB session")
         db.close()
 
 db_dependency = Annotated[Session, Depends(get_db)]

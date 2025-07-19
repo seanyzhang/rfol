@@ -11,7 +11,7 @@ RUN npm install
 # Copy the source code
 COPY . .
 
-# Vite dev server uses port 5173
+# Vite dev server default port
 EXPOSE 5173
 
 # Run Vite dev server

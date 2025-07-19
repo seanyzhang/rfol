@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import app.models as models
 from app.db import engine
+from app.logger import logger
 
 # Router Imports
 from app.routes.user_routes import router as user_router
@@ -10,7 +11,8 @@ from app.routes.auth_routes import router as auth_router
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
 ]
 
 app.add_middleware(
@@ -29,4 +31,5 @@ app.include_router(auth_router)
 
 @app.get("/")
 async def root():
+    logger.info("startup successful")
     return {"message": "Hello World"}

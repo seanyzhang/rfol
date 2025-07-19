@@ -10,7 +10,8 @@ class User(Base):
     uuid = Column(UUID(as_uuid=True), unique=True, nullable=False, default=uuid4)
     username = Column(String, unique=True, nullable=False, index=True)
     email = Column(String, unique=True, nullable=False, index=True)
-    full_name = Column(String, nullable=False)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
 

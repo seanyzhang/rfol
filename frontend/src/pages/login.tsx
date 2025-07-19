@@ -51,7 +51,11 @@ const Login = ({ isExiting }: { isExiting: boolean }) => {
                         <ul className="list-disc list-inside space-y-1">
                         {serverErr && <li> {serverErr} </li>}
                         {Object.entries(hasAccount ? errorsSignIn : errorsSignUp).map(([key, val]) => (
-                            <li key={key}>{val?.message}</li>
+                            <li key={key}>
+                                {typeof val === "object" && "message" in val
+                                ? val.message
+                                : String(val)}
+                            </li>
                             ))
                         }
                         </ul>

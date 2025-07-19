@@ -4,7 +4,8 @@ from pydantic import BaseModel, EmailStr
 class UserBase(BaseModel):
     email: EmailStr
     username: str
-    full_name: str
+    first_name: str
+    last_name: str
 
 class UserInDB(UserBase):
     hashed_password: str
@@ -13,3 +14,10 @@ class UserInDB(UserBase):
 
 class UserCreate(UserBase):
     password: str
+
+class UserOut(UserBase):
+    uuid: UUID
+    id: int
+    model_config = {
+        "from_attributes": True
+    }

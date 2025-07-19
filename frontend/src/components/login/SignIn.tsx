@@ -11,11 +11,6 @@ type SignInFormData = {
     password: string;
 }
 
-type User_Data = {
-    query: string;
-    password: string;
-}
-
 type Props = {
     register: UseFormRegister<SignInFormData>;
     handleSubmit: (onValid: SubmitHandler<SignInFormData>) => (e?: React.BaseSyntheticEvent) => void;
@@ -39,14 +34,17 @@ const SignIn = ({register, handleSubmit, errors, setSuccess, setServerErr} : Pro
 
     const submit: SubmitHandler<SignInFormData> = async (data) => {
         
-        const user_data: User_Data = {
-            query: data.query,
-            password: data.password,
-        }
+        const user_data = new URLSearchParams();
+        user_data.append("username", data.query);
+        user_data.append("password", data.password);
 
         try {
-            const res = await axios.post(`${API_BASE_URL}/auth/token`, user_data);
-            logger.log(res)
+            const res = await axios.post(`${API_BASE_URL}/auth/token`, user_data, {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                }
+            });
+            logger.log(res);
             setSuccess(true);
         } catch (error) {
             if (axios.isAxiosError(error)) {
