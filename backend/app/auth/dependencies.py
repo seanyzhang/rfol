@@ -75,11 +75,11 @@ async def get_current_session(
         logger.warning(f"No active session found for session ID: {session_id}")
         raise HTTPException(status_code=401, detail="Session expired/invalid")
     
-    logger.debug(f"Session ID {session_id} mapped to username: {username.decode()}")
-    user = get_user_by_username(username.decode(), db)
+    logger.debug(f"Session ID {session_id} mapped to username: {username}")
+    user = get_user_by_username(username, db)
 
     if not user:
-        logger.warning(f"User not found for username: {username.decode()}")
+        logger.warning(f"User not found for username: {username}")
         raise HTTPException(status_code=404, detail="User not found")
 
     logger.info(f"Valid session session found for user {user.username}")
