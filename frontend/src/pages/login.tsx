@@ -1,12 +1,13 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import PageWrapper from "../components/PageWrapper"
 import "./login.css"
 import { ANIMATION_DELAYS } from "../constants"
 import PillToggle from "../components/login/PillToggle"
 import SignUp from "../components/login/SignUp"
 import SignIn from "../components/login/SignIn"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
+import { useUser } from "../UserContext"
 
 type SignInFormData = {
     query: string;
@@ -23,25 +24,42 @@ type SignUpFormData = {
 
 const Login = ({ isExiting }: { isExiting: boolean }) => {
     /* Authentication */ 
-    const [success, setSuccess] = useState(false);
     const [serverErr, setServerErr] = useState("");
     const [hasAccount, setHasAccount] = useState(false);
+    const { currentUser } = useUser();
+    const navigate = useNavigate(); 
 
     const {
         register: registerSignIn, 
         handleSubmit: handleSubmitSignIn, 
         formState: {errors: errorsSignIn},
+        reset: resetSignIn,
     } = useForm<SignInFormData>();
 
     const {
         register: registerSignUp, 
         handleSubmit: handleSubmitSignUp,
-        formState: {errors: errorsSignUp}
+        formState: {errors: errorsSignUp},
+        reset: resetSignUp
     } = useForm<SignUpFormData>();
 
 
     /* Sign Up and Sign In Pill Effects*/
     const [throttling, setThrottling] = useState(false);
+
+    useEffect(() => {
+        if (hasAccount) {
+          resetSignIn();
+        } else {
+          resetSignUp();
+        }
+      }, [hasAccount]);
+
+    useEffect(() => {
+        if (currentUser) {
+            navigate("/")
+        }
+    }, [currentUser])
 
     return (
         <PageWrapper isExiting={isExiting}>
@@ -63,7 +81,7 @@ const Login = ({ isExiting }: { isExiting: boolean }) => {
                     )
                 }
                 {
-                    success ? 
+                    currentUser ? 
                     (<div>
                         <p> You are logged in! </p>
                         <Link to="/"> Click here to continue </Link>
@@ -93,7 +111,6 @@ const Login = ({ isExiting }: { isExiting: boolean }) => {
                                         register = {registerSignIn}
                                         handleSubmit = {handleSubmitSignIn}
                                         errors = {errorsSignIn}
-                                        setSuccess = {setSuccess}
                                         setServerErr = {setServerErr}
                                     />
                                 </div>

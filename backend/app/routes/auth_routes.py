@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi_limiter.depends import RateLimiter
 from typing import Annotated
 
 from app.logger import logger
@@ -12,7 +13,7 @@ router = APIRouter(
     tags=['auth']
 )
 
-@router.post("/token")
+@router.post("/token", dependencies=[Depends(RateLimiter(times=3, minutes=1))])
 async def login(
     db: db_dependency,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],

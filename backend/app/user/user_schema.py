@@ -18,6 +18,7 @@ class UserCreate(UserBase):
 class UserOut(UserBase):
     uuid: UUID
     id: int
+    is_active: bool
     model_config = {
         "from_attributes": True
     }

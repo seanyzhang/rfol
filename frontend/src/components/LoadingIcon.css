@@ -1,0 +1,19 @@
+/* Borrowed from https://codepen.io/mostafa_abdallah/pen/mdpdgaQ */
+
+
+.bullet {
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--color-bg-accent);
+    margin-left: 5px;
+    border-radius: 50%;
+    animation: loading 0.9s infinite alternate;
+}
+.two {animation-delay: 0.3s;}
+.three {animation-delay: 0.6s;}
+@keyframes loading {
+    to {
+        opacity: 0.3;
+        transform: translateY(-25px);
+    }
+}

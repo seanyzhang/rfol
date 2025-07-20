@@ -112,6 +112,9 @@ const SignUp = ({register, handleSubmit, errors, setHasAccount, setServerErr}: P
                             placeholder="Password" 
                             id="password" 
                             type={`${showPw ? "text" : "password"}`} 
+                            onCopy={(e) => e.preventDefault()}
+                            onCut={(e) => e.preventDefault()}
+                            onPaste={(e) => e.preventDefault()}
                             {...register("password", 
                                 { 
                                     required: "Password is required",

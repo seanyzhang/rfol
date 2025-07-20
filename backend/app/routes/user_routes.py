@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi_limiter.depends import RateLimiter
 from typing import Annotated
 
 from app.logger import logger
@@ -18,7 +19,7 @@ router = APIRouter(
 async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
     return current_user
 
-@router.post("/create", response_model=UserOut)
+@router.post("/create", response_model=UserOut, dependencies=[Depends(RateLimiter(times=6, minutes=1))])
 async def create_new_user(user_data: UserCreate, db: db_dependency):
     logger.debug(f"Attempting to create user {user_data.username}")
     hashed_pw = password_hash(user_data.password)

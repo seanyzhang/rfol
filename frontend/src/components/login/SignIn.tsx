@@ -3,6 +3,7 @@ import { logger } from '../../utils/logger';
 import { type FieldErrors, type SubmitHandler, type UseFormRegister } from 'react-hook-form';
 import { useState } from 'react';
 import { ANIMATION_DELAYS } from '../../constants';
+import { useUser } from '../../UserContext';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -15,14 +16,13 @@ type Props = {
     register: UseFormRegister<SignInFormData>;
     handleSubmit: (onValid: SubmitHandler<SignInFormData>) => (e?: React.BaseSyntheticEvent) => void;
     errors: FieldErrors<SignInFormData>;
-    setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
     setServerErr: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SignIn = ({register, handleSubmit, errors, setSuccess, setServerErr} : Props) => {
-    
+const SignIn = ({register, handleSubmit, errors, setServerErr} : Props) => {
     const [showPw, setShowPw] = useState(false);
     const [showPwThrottle, setShowPwThrottle] = useState(false);
+    const {setCurrentUser} = useUser()
 
     const handleShowPW = () => {
         if (showPwThrottle) return;
@@ -30,6 +30,30 @@ const SignIn = ({register, handleSubmit, errors, setSuccess, setServerErr} : Pro
         setShowPwThrottle(true);
         setShowPw(prev => !prev)
         setTimeout(() => setShowPwThrottle(false), ANIMATION_DELAYS.THROTTLE);
+    }
+
+    const loginSuccess = async (token: string) => {
+        try {
+            const res = await axios.post(
+                `${API_BASE_URL}/session/create`, 
+                {} ,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }, 
+                    withCredentials: true,
+                }
+            )
+            logger.log("Session created:", res.data);
+
+            const userRes = await axios.get(`${API_BASE_URL}/session`, {
+                withCredentials: true,
+            })
+
+            setCurrentUser(userRes.data)
+        } catch (error) {
+            logger.error("Error creating session:", error);
+        }
     }
 
     const submit: SubmitHandler<SignInFormData> = async (data) => {
@@ -45,7 +69,7 @@ const SignIn = ({register, handleSubmit, errors, setSuccess, setServerErr} : Pro
                 }
             });
             logger.log(res);
-            setSuccess(true);
+            await loginSuccess(res.data.access_token)
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 logger.error(error.response?.data?.detail || error.message)
@@ -79,6 +103,9 @@ const SignIn = ({register, handleSubmit, errors, setSuccess, setServerErr} : Pro
                             id="pw" 
                             placeholder="Password"
                             type={`${showPw ? "text" : "password"}`}
+                            onCopy={(e) => e.preventDefault()}
+                            onCut={(e) => e.preventDefault()}
+                            onPaste={(e) => e.preventDefault()}
                             {...register("password", 
                                 { 
                                     required: "Password is required",

@@ -1,6 +1,6 @@
 /* Icons Obtained from: https://www.svgrepo.com/collection/coolicons-line-oval-icons */
 
-import { JSX } from "react";
+import type { JSX } from "react";
 
 export const ANIMATION_DELAYS = {
     TRANSITION: 300,
