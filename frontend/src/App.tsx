@@ -11,7 +11,7 @@ function App() {
   return (
     <>
       <UserProvider>
-        <main className={"bg-light container overflow-hidden no-scrollbar h-[100vh]"}>
+        <main className={"main bg-light flex flex-col no-scrollbar"}>
           <Routes>
             <Route path="/" element={<Dashboard isExiting={isExiting}/>} />
             <Route path="/login" element={<Login isExiting={isExiting}/>} />

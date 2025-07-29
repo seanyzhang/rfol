@@ -9,7 +9,7 @@ const PageWrapper = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className={`page ${isExiting ? 'fade-out' : ''}`}>
+    <div className={`pagewrapper${isExiting ? ' fade-out' : ''}`}>
       {children}
     </div>
   );

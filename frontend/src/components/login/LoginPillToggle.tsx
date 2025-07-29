@@ -19,8 +19,8 @@ const PillToggle = ({ hasAccount, onToggle }: Props) => {
       const { offsetLeft, offsetWidth } = pillActive;
       highlighter.style.transform = `translateX(${offsetLeft}px)`;
       highlighter.style.width = `${offsetWidth}px`;
-      pillActive.style.color = "var(--color-text-dark)";
-      pillInactive.style.color = "var(--color-text)";
+      pillInactive.style.color = "var(--color-text-dark)";
+      pillActive.style.color = "var(--color-text)";
     }
   };
 
@@ -29,7 +29,7 @@ const PillToggle = ({ hasAccount, onToggle }: Props) => {
   }, [hasAccount]);
 
   return (
-    <div className="signup-signin relative flex justify-evenly">
+    <div className="signup-signin relative flex justify-center">
       <button
         ref={pill1}
         onClick={() => onToggle(false)}
@@ -46,8 +46,7 @@ const PillToggle = ({ hasAccount, onToggle }: Props) => {
       </button>
       <span
         ref={highlight}
-        className="absolute top-0 left-0 h-full p-4.5 bg-bg-accent rounded-full transition-all duration-500 ease-in-out"
-        style={{ width: "50%" }}
+        className="absolute top-0 left-0 h-full p-4.5 transition-all duration-500 ease-in-out w-1/2 bg-white/40 rounded-xl shadow-md backdrop-blur-sm"
       ></span>
     </div>
   );
