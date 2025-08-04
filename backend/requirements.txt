@@ -21,8 +21,10 @@ Jinja2==3.1.6
 markdown-it-py==3.0.0
 MarkupSafe==3.0.2
 mdurl==0.1.2
+nulltype==2.3.1
 packaging==25.0
 passlib==1.7.4
+plaid-python==35.0.0
 pluggy==1.6.0
 psycopg2-binary==2.9.10
 pycparser==2.22
@@ -31,6 +33,7 @@ pydantic_core==2.33.2
 Pygments==2.19.2
 PyJWT==2.10.1
 pytest==8.4.1
+python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
 python-multipart==0.0.20
 PyYAML==6.0.2

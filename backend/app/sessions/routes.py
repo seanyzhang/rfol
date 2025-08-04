@@ -7,8 +7,9 @@ from app.logger import logger
 from app.auth.dependencies import get_current_active_user
 from app.redis import redis_client as redis
 from app.db import db_dependency
-from app.user.user_schema import UserOut
-from app.user.user_crud import get_user_by_username
+from app.sessions.schemas import *
+from app.users.schemas import UserOut
+from app.users.crud import get_user_by_username
 
 from dotenv import load_dotenv
 import os
@@ -42,10 +43,13 @@ async def create_session(
     )
 
     logger.info(f"Session created for user {current_user.username}")
-    return {"message": "Session created"}
+    return SessionResponse(message= "Session created", success=True)
 
 @router.get("", dependencies=[Depends(RateLimiter(times=3, minutes=1))])
-async def check_session(db: db_dependency, session_id: str | None = Cookie(default=None)):
+async def check_session(
+    db: db_dependency, 
+    session_id: str | None = Cookie(default=None)
+):
     logger.debug("Checking session id")
     if session_id is None:
         logger.warning("no session cookie")
@@ -69,9 +73,12 @@ async def check_session(db: db_dependency, session_id: str | None = Cookie(defau
     }
 
 @router.post("/logout")
-async def logout(response: Response, session_id: str):
+async def logout(
+    response: Response, 
+    session_id: str
+):
     logger.debug("logging out")
     response.delete_cookie(key="session_id")
     await redis.delete(f"session:{session_id}")
     logger.info("Successfully logged out")
-    return {"logged out"}
+    return SessionResponse(message= "Logged Out", success=True)

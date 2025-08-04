@@ -9,9 +9,9 @@ from app.logger import logger
 from app.redis import redis_client
 
 # Router Imports
-from app.routes.user_routes import router as user_router
-from app.routes.auth_routes import router as auth_router
-from app.routes.session_router import router as session_router
+from app.users.routes import router as user_router
+from app.auth.routes import router as auth_router
+from app.sessions.routes import router as session_router
 
 async def custom_callback(request, response, pexpire):
     logger.warning("Rate limit exceeded")

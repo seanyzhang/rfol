@@ -1,15 +1,18 @@
 from app.db import db_dependency
-from app.user.user_schema import UserCreate
+from sqlalchemy.orm import Session
+from app.users.schemas import UserCreate
 from fastapi import HTTPException
+from typing import Optional
 from pydantic import EmailStr
 from sqlalchemy.exc import IntegrityError
+from app.users.schemas import UserOut
 from app.models.user_model import User
 from app.logger import logger
 
 def create_user(
     user: UserCreate, 
     hashed_pw: str, 
-    db: db_dependency
+    db: Session
 ):
     new_user = User(
         first_name = user.first_name.strip().lower(),
@@ -25,7 +28,15 @@ def create_user(
         db.commit()
         db.refresh(new_user)
         logger.info(f"Successfully commited user {new_user.username} to db")
-        return new_user
+        return UserOut(
+            first_name=new_user.first_name, # type: ignore
+            last_name=new_user.last_name, # type: ignore
+            username=new_user.username, # type: ignore
+            email=new_user.email, # type: ignore
+            uuid=new_user.uuid, # type: ignore
+            id=new_user.id, # type: ignore
+            is_active=new_user.is_active # type: ignore
+        )
     except IntegrityError as e:
         logger.warning(f"Unable to create user due to: {e}")
         db.rollback()
@@ -44,7 +55,7 @@ def create_user(
         raise HTTPException(status_code=500, detail=f"Error: {err}")
     
 
-def get_user_by_id(user_id: int, db: db_dependency):
+def get_user_by_id(user_id: int, db: db_dependency) -> User:
     logger.debug(f"searching for user of id: {user_id}")
     result = db.query(User).filter(User.id == user_id).first()
     if not result:
@@ -53,7 +64,7 @@ def get_user_by_id(user_id: int, db: db_dependency):
     logger.info(f"User found")
     return result
 
-def get_user_by_username(username: str, db: db_dependency):
+def get_user_by_username(username: str, db: db_dependency) -> User:
     logger.debug(f"searching for user of username: {username}")
     result = db.query(User).filter(User.username == username).first()
     if not result: 
@@ -62,7 +73,7 @@ def get_user_by_username(username: str, db: db_dependency):
     logger.info(f"User found")
     return result
 
-def get_user_by_email(email: EmailStr, db: db_dependency):
+def get_user_by_email(email: EmailStr, db: db_dependency) -> User:
     logger.debug(f"searching for user of email: {email}")
     result = db.query(User).filter(User.email == email).first()
     if not result:
@@ -71,7 +82,7 @@ def get_user_by_email(email: EmailStr, db: db_dependency):
     logger.info(f"User found")
     return result
     
-def get_user_by_query(query: int | str, db: db_dependency):
+def get_user_by_query(query: int | str, db: db_dependency) -> User:
     user = None
     logger.debug(f"searching for user by query: {query}")
     if isinstance(query, int):
@@ -102,4 +113,14 @@ def get_user_by_query(query: int | str, db: db_dependency):
         raise HTTPException(status_code=404, detail='User not found')
 
     logger.info(f"returning user {user.username}")
+    return user
+
+def update_user_pw(query: int | str, hashed_pw: str, db: db_dependency):
+    user = get_user_by_query(query, db)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    user.hashed_password = hashed_pw # type: ignore
+    db.commit()
+    db.refresh(user)
     return user
