@@ -35,8 +35,8 @@ async def create_new_user(
     if not validate_pw(user_data.password):
         logger.info(f"Failed to create user {user_data.username}")
         raise HTTPException(status_code=500, detail="Invalid password")
-    hashed_pw = password_hash(user_data.password)
-    user = create_user(user_data, hashed_pw, db)
+    
+    user = create_user(user_data, db)
     logger.info(f"Successfully created user {user_data.username}")
     return user
 

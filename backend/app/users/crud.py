@@ -2,23 +2,28 @@ from app.db import db_dependency
 from sqlalchemy.orm import Session
 from app.users.schemas import UserCreate
 from fastapi import HTTPException
-from typing import Optional
 from pydantic import EmailStr
 from sqlalchemy.exc import IntegrityError
 from app.users.schemas import UserOut
 from app.models.user_model import User
 from app.logger import logger
+from app.auth.utils import sanitize_email, password_hash, email_hash, encrypt_email, decrypt_email
 
 def create_user(
     user: UserCreate, 
-    hashed_pw: str, 
     db: Session
 ):
+    hashed_pw = password_hash(user.password)
+    sanitized_email = sanitize_email(user.email)
+    hashed_email = email_hash(sanitized_email)
+    encrypted_email = encrypt_email(sanitized_email)
+
     new_user = User(
         first_name = user.first_name.strip().lower(),
         last_name = user.last_name.strip().lower(),
         username = user.username.strip().lower(),
-        email = user.email.strip().lower(),
+        hashed_email = hashed_email,
+        encrypted_email = encrypted_email,
         hashed_password = hashed_pw
     )
 
@@ -32,7 +37,7 @@ def create_user(
             first_name=new_user.first_name, # type: ignore
             last_name=new_user.last_name, # type: ignore
             username=new_user.username, # type: ignore
-            email=new_user.email, # type: ignore
+            email=decrypt_email(new_user.encrypted_email), # type: ignore
             uuid=new_user.uuid, # type: ignore
             id=new_user.id, # type: ignore
             is_active=new_user.is_active # type: ignore
@@ -75,7 +80,9 @@ def get_user_by_username(username: str, db: db_dependency) -> User:
 
 def get_user_by_email(email: EmailStr, db: db_dependency) -> User:
     logger.debug(f"searching for user of email: {email}")
-    result = db.query(User).filter(User.email == email).first()
+    sanitized_email = sanitize_email(email)
+    target_hashed_email = email_hash(sanitized_email)
+    result = db.query(User).filter(User.hashed_email == target_hashed_email).first()
     if not result:
         logger.warning(f"No user with email {email} found")
         raise HTTPException(status_code=404, detail='no user found with that email')
@@ -102,7 +109,8 @@ def get_user_by_query(query: int | str, db: db_dependency) -> User:
         except HTTPException:
             logger.debug("Searching via email")
             try:
-                user = get_user_by_email(query, db)
+                sanitized = sanitize_email(query)
+                user = get_user_by_email(sanitized, db)
                 if user: logger.info("User found via email")
                 else: logger.info("no user found by email")
             except HTTPException:

@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
-import jwt, os, re
+import jwt, os, re, hmac, hashlib
+from cryptography.fernet import Fernet
 from passlib.context import CryptContext
 from dotenv import load_dotenv
 
@@ -15,13 +16,27 @@ load_dotenv()
 ACCESS_EXPIRY = int(os.getenv("ACCESS_TOKEN_EXPIRY_MINUTES", "5"))
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
+HMAC_KEY = os.getenv("HMAC_SHA256_KEY")
+FERNET_KEY = os.getenv("FERNET_KEY")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+cipher = Fernet(FERNET_KEY)
 
-def validate_pw(password: str) -> bool:
+def sanitize_pw(password: str) -> bool:
     pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
     return True if re.match(pattern, password) else False
 
+def sanitize_email(email: str) -> str:
+    return email.strip().lower()
+
+def email_hash(email: str) -> str:
+    return hmac.new(HMAC_KEY, email.lower().encode(), hashlib.sha256).hexdigest()
+
+def encrypt_email(email: str) -> str:
+    return cipher.encrypt(email.encode()).decode()
+
+def decrypt_email(token: str) -> str:
+    return cipher.decrypt(token.encode()).decode()
 
 def password_hash(password: str) -> str:
     return pwd_context.hash(password)
