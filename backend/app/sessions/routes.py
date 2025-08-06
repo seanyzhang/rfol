@@ -1,18 +1,22 @@
+import uuid
+import os
+from dotenv import load_dotenv
+
 from fastapi import APIRouter, HTTPException, Depends, Response, Cookie
 from fastapi_limiter.depends import RateLimiter
 from typing import Annotated
-
-import uuid
-from app.logger import logger
-from app.auth.dependencies import get_current_active_user
-from app.redis import redis_client as redis
-from app.db import db_dependency
 from app.sessions.schemas import *
 from app.users.schemas import UserOut
+
+from app.auth.dependencies import get_current_active_user
 from app.users.crud import get_user_by_username
 
-from dotenv import load_dotenv
-import os
+from app.db import db_dependency
+from app.logger import logger
+from app.redis import redis_client as redis
+
+
+
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")

@@ -8,8 +8,8 @@ from app.logger import logger
 from app.db import db_dependency
 from app.redis import redis_client as redis
 from app.auth.dependencies import get_current_user
-from app.auth.utils import password_hash, validate_pw
-from app.auth.schemas import ForgotPasswordRequest, ForgotPasswordResponse, ResetPasswordRequest, PasswordUpdateResponse
+from app.auth.utils import password_hash, sanitize_pw
+from app.auth.schemas import ForgotPasswordRequest, ForgotPasswordResponse, ResetPasswordRequest, PasswordUpdateResponse, ValidateResetTokenResponse
 from app.users.crud import create_user, get_user_by_email, update_user_pw, get_user_by_username
 from app.sessions.routes import check_session
 from app.users.schemas import UserCreate, UserOut
@@ -24,6 +24,12 @@ router = APIRouter(
 async def read_users_me(
     current_user: Annotated[User, Depends(get_current_user)]
 ):
+    """
+    Testing model. Get the currently authenticated user's details.
+    
+    Args:
+        current_user (User): The currently authenticated user.
+    """
     return current_user
 
 @router.post("/create", response_model=UserOut, dependencies=[Depends(RateLimiter(times=6, minutes=1))])
@@ -31,8 +37,21 @@ async def create_new_user(
     user_data: UserCreate, 
     db: db_dependency
 ):
+    """
+    Create a new user in the database.
+    
+    Args:
+        user_data (UserCreate): The user data to create.
+        db (db_dependency): The database dependency.
+    
+    Returns:
+        UserOut: The created user object.
+    
+    Raises:
+        HTTPException: If the user creation fails due to validation errors or duplicate entries.
+    """
     logger.debug(f"Attempting to create user {user_data.username}")
-    if not validate_pw(user_data.password):
+    if not sanitize_pw(user_data.password):
         logger.info(f"Failed to create user {user_data.username}")
         raise HTTPException(status_code=500, detail="Invalid password")
     
@@ -46,6 +65,19 @@ async def forgot_password(
     background: BackgroundTasks,
     db: db_dependency
 ):
+    """
+    Handle forgot password requests by generating a reset token and sending it to the user's email.
+    Args:
+        req (ForgotPasswordRequest): The request containing the user's email.
+        background (BackgroundTasks): Background tasks for sending emails.
+        db (db_dependency): The database dependency.
+    
+    Returns:
+        ForgotPasswordResponse: A response indicating the result of the password reset request.
+    
+    Raises:
+        HTTPException: If the rate limit is exceeded or if there is an error processing the request
+    """
     try:
         logger.debug(f"Password reset requested for email: {req.email}")
 
@@ -58,7 +90,10 @@ async def forgot_password(
         
         user = get_user_by_email(req.email, db)
 
-        res = ForgotPasswordResponse(message="If an account exists with this email, you will receive a password reset link", success=True)
+        res = ForgotPasswordResponse(
+            message="If an account exists with this email, you will receive a password reset link", 
+            success=True
+        )
 
         if not user:
             logger.warning(f"Password requested for non-existent email: {req.email}")
@@ -111,7 +146,18 @@ async def forgot_password(
     
 @router.get("/validate-reset-token")
 async def validate_reset_token(token: str):
-    """Check if a reset token is valid"""
+    """
+    Check if a reset token is valid.
+
+    Args:
+        token (str): The reset token to validate.
+
+    Returns:
+        dict: A dictionary indicating whether the token is valid and the associated email.
+    
+    Raises:
+        HTTPException: If the token is invalid or expired.
+    """
     token_key = f"pw_reset:{token}"
     token_data = await redis.get(token_key)
     
@@ -119,17 +165,30 @@ async def validate_reset_token(token: str):
         raise HTTPException(status_code=400, detail="Invalid or expired reset token")
     
     data = json.loads(token_data)
-    return {
-        "valid": True,
-        "email": data["email"],
-        "created_at": data["created_at"]
-    }
+    return ValidateResetTokenResponse(
+        valid=True,
+        email=data["email"],
+        created_at=data["created_at"]
+    )
 
 @router.post("/reset-password", dependencies=[Depends(RateLimiter(times=2, hours=1))])
 async def reset_password(
     req: ResetPasswordRequest,
     db: db_dependency
 ):
+    """
+    Reset the user's password using the provided reset token.
+    
+    Args:
+        req (ResetPasswordRequest): The request containing the reset token and new password.
+        db (db_dependency): The database dependency.
+    
+    Returns:
+        PasswordUpdateResponse: A response indicating the result of the password reset.
+    
+    Raises:
+        HTTPException: If the reset token is invalid or expired, or if there is an error processing the request.
+    """
     try:
         logger.debug(f"Password reset attempt with token")
 
@@ -173,9 +232,11 @@ async def reset_password(
             await pipe.execute()
         
         logger.info(f"Password reset successful for user: {user.username}")
-        
-        res = PasswordUpdateResponse(message="Password has been reset successfully. Please log in with your new password.", success=True)
-        return res
+
+        return PasswordUpdateResponse(
+            message="Password has been reset successfully. Please log in with your new password.",
+            success=True
+        )
         
     except HTTPException:
         raise

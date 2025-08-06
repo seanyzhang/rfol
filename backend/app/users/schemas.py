@@ -1,5 +1,7 @@
 from uuid import UUID
 from pydantic import BaseModel, EmailStr, field_validator, model_validator
+from functools import cached_property
+from app.auth.utils import decrypt_email  # adjust import as needed
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -25,6 +27,10 @@ class UserInDB(BaseModel):
     is_active: bool
 
     model_config = {"from_attributes": True}
+
+    @cached_property
+    def decrypted_email(self) -> str:
+        return decrypt_email(self.encrypted_email)
 
 class UserCreate(UserBase):
     password: str

@@ -3,12 +3,13 @@ from app.db import db_dependency
 
 def google_sign_in(
     db: db_dependency,
-    
 ):
     # TODO if user_email in DB, add google oauth2 info to account. else create new account with fetched data
     return 
 
-def apple_sign_in():
+def apple_sign_in(
+    db: db_dependency,
+):
     # same logic as google ssi
     return
 

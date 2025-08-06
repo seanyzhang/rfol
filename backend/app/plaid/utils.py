@@ -12,6 +12,15 @@ from plaid.model.credit_account_subtypes import CreditAccountSubtypes
 from plaid.model.credit_account_subtype import CreditAccountSubtype
 
 def create_link_token(user_uuid: UUID):
+    """
+    Creates a Plaid link token for the specified user.
+    
+    Args:
+        user_uuid (UUID): The UUID of the user for whom the link token is created.
+    
+    Returns:
+        str: The generated Plaid link token.
+    """
     req = LinkTokenCreateRequest(
         user = LinkTokenCreateRequestUser(
             client_user_id=str(user_uuid)

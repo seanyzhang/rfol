@@ -1,12 +1,12 @@
 from typing import Annotated
 from fastapi import Cookie, HTTPException
-
-from app.logger import logger
+from app.users.schemas import UserOut
 from app.auth.schemas import *
+
+from app.users.crud import get_user_by_username
+from app.logger import logger
 from app.db import db_dependency
 from app.redis import redis_client as redis
-from app.users.schemas import UserOut
-from app.users.crud import get_user_by_username
 
 async def get_current_session(
     db: db_dependency,

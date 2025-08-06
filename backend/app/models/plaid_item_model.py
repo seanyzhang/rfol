@@ -6,6 +6,24 @@ from uuid import uuid4
 from datetime import datetime, timezone
 
 class PlaidItem(Base):
+    """
+    SQLAlchemy model for storing Plaid item information.
+        
+    Attributes:
+        id (int): Primary key, auto-incremented.
+        uuid (UUID): Unique identifier for the Plaid item.
+        plaid_item_id (str): Unique Plaid item ID.
+        plaid_access_token (str): Encrypted Plaid access token.
+        institution_id (str): Plaid institution ID.
+        institution_name (str): Name of the financial institution.
+        is_active (bool): Indicates if the item is active.
+        needs_reauth (bool): Indicates if the item needs re-authentication.
+        last_error (str): Last error message from Plaid, if any.
+        last_successful_sync (DateTime): Timestamp of the last successful sync with Plaid.
+        user_uuid (UUID): Foreign key linking to the associated user.
+        created_at (DateTime): Timestamp when the item was created.
+        updated_at (DateTime): Timestamp when the item was last updated.
+    """
     __tablename__ = "plaid_items"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
