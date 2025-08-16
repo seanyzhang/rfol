@@ -25,7 +25,7 @@ const Overview = () => {
         <>  
             <div className="page pt-[3vh] pr-[3vw] pb-[4vh] pl-[3vw] grid grid-rows-8 grid-cols-4 gap-4">
                 <div className="sec accounts flex-col h-full rounded-2xl
-                row-start-1 col-start-1 row-end-7 col-end-2">
+                row-start-1 col-start-1 row-end-6 col-end-2">
                     <div className="accountsTitle flex mb-3">
                         <p className="text-2xl">Accounts: {accountType}</p>
                     </div>
@@ -66,14 +66,14 @@ const Overview = () => {
                     </div>
                 </div>
                 <div className="sec nextPaycheck flex-col justify-center items-center h-full rounded-2xl
-                row-start-7 col-start-1 row-end-10 col-end-2">
+                row-start-6 col-start-1 row-end-10 col-end-2">
                     <div className="nextPaycheckTitle">
                         <p className="text-2xl">Income</p>
                     </div>
                     
                 </div>
                 <div className="sec summary networth justify-center items-center h-full grid grid-cols-[3fr_2fr] grid-rows-[2rem_auto] gap-4 rounded-2xl
-                row-start-1 col-start-2 row-end-6 col-end-4">
+                row-start-1 col-start-2 row-end-5 col-end-4">
                     <div className="summaryTitle row-start-1 row-end-1 col-start-1 col-end-1">
                         <p className="text-2xl">Account summary</p>
                     </div>
@@ -90,25 +90,25 @@ const Overview = () => {
                     </div>
                 </div>
                 <div className="sec budgetTracker flex-col justify-center items-center h-full rounded-2xl
-                row-start-6 col-start-2 row-end-10 col-end-3">
+                row-start-5 col-start-2 row-end-10 col-end-3">
                     <div className="budgetTitle">
                         <p className="text-2xl">Monthly Budget</p>
                     </div>
                 </div>
                 <div className="sec recentTransactions flex-col justify-center items-center h-full rounded-2xl
-                row-start-6 col-start-3 row-end-10 col-end-4">
+                row-start-5 col-start-3 row-end-10 col-end-4">
                     <div className="transactionTitle">
                         <p className="text-2xl">Recent Transactions</p>
                     </div> 
                 </div>
                 <div className="sec goalsVisual flex-col justify-center items-center h-full rounded-2xl
-                row-start-1 col-start-4 row-end-5 col-end-5">
+                row-start-1 col-start-4 row-end-4 col-end-5">
                     <div className="goalsTitle">
                         <p className="text-2xl">Goals Progress</p>
                     </div>
                 </div>
                 <div className="sec recommendations flex-col justify-center items-center h-full rounded-2xl
-                row-start-5 col-start-4 row-end-10 col-end-5">
+                row-start-4 col-start-4 row-end-10 col-end-5">
                     <div className="recommendationTitle">
                         <p className="text-2xl">Recommendations</p>
                     </div>

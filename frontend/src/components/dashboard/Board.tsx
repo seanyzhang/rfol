@@ -9,6 +9,8 @@ import PlanningSlide from './PlanningSlide';
 import GoalSlide from './GoalSlide';
 import NavBar from '../NavBar';
 import { logger } from '../../utils/logger';
+import { useAccounts } from '../../AccountContext';
+import PlaidLinkButton from '../PlaidLinkButton';
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -127,16 +129,28 @@ const Board = () => {
         }
     });
 
+    const { accounts, loading, refreshAccounts } = useAccounts();
+
     return (
-        <>
-            <NavBar slides= {slides} currentSlide= {currentSlide} goTo={goToSlide} />
-            <div className="bg-[#f2f2f2] slide-container no-scrollbar" ref={container}>
-                {slides.map((slide, idx) => (
-                    <section key={slide.id} className={slide.className} ref={(el) => {slideRefs.current[idx] = el}}>
-                        <slide.html />
-                    </section>
-                ))}
-            </div>
+        <>  
+            { accounts.length === 0 ? (
+                <div>
+                    <p> You have no accounts linked! </p>
+                    <PlaidLinkButton/>
+                </div>
+                ) : (
+                <>
+                    <NavBar slides= {slides} currentSlide= {currentSlide} goTo={goToSlide} />
+                    <div className="bg-[#f2f2f2] slide-container no-scrollbar" ref={container}>
+                        {slides.map((slide, idx) => (
+                            <section key={slide.id} className={slide.className} ref={(el) => {slideRefs.current[idx] = el}}>
+                                <slide.html />
+                            </section>
+                        ))}
+                    </div>
+                </>
+                )
+            }
         </>
     )
 }
